@@ -27,7 +27,7 @@ router.get('/', (req, res) => res.status(200).send({
       example: '/juz/30'
     }
   },
-  maintaner: 'Sutan Gading Fadhillah Nasution <contact@gading.dev>',
+  maintaner: 'Sutan Gading Fadhillah Nasution - wahid <contact@gading.dev>',
   source: 'https://github.com/gadingnst/quran-api'
 }));
 
