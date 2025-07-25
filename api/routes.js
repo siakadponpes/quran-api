@@ -281,6 +281,127 @@ router.get('/', (req, res) => {
           opacity: 0.8;
         }
 
+        /* Data Sources Section */
+        .data-sources {
+          width: 100%;
+          max-width: 1000px;
+          margin: 4rem 0;
+        }
+
+        .sources-title {
+          text-align: center;
+          font-size: 2rem;
+          margin-bottom: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .sources-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 2rem;
+        }
+
+        .source-card {
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 20px;
+          padding: 2rem;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .source-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+          transition: left 0.5s;
+        }
+
+        .source-card:hover::before {
+          left: 100%;
+        }
+
+        .source-card:hover {
+          transform: translateY(-8px);
+          background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(255, 215, 0, 0.3);
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .source-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .source-header i {
+          font-size: 1.5rem;
+          color: #ffd700;
+        }
+
+        .source-header h3 {
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #fff;
+          margin: 0;
+        }
+
+        .source-description {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          opacity: 0.9;
+          margin-bottom: 1.5rem;
+        }
+
+        .source-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .tag {
+          background: linear-gradient(45deg, #4CAF50, #45a049);
+          color: white;
+          padding: 0.3rem 0.8rem;
+          border-radius: 15px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+
+        .source-note {
+          background: rgba(255, 193, 7, 0.1);
+          border: 1px solid rgba(255, 193, 7, 0.3);
+          border-radius: 10px;
+          padding: 0.8rem;
+          font-size: 0.8rem;
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5rem;
+          margin-top: 1rem;
+        }
+
+        .source-note i {
+          color: #ffc107;
+          margin-top: 0.1rem;
+          flex-shrink: 0;
+        }
+
+        .source-note span {
+          opacity: 0.9;
+          line-height: 1.4;
+        }
+
         /* Footer */
         .footer {
           text-align: center;
@@ -306,15 +427,20 @@ router.get('/', (req, res) => {
           animation-fill-mode: both;
         }
 
-        .endpoint-card:nth-child(1) { animation-delay: 0.1s; }
-        .endpoint-card:nth-child(2) { animation-delay: 0.2s; }
-        .endpoint-card:nth-child(3) { animation-delay: 0.3s; }
-        .endpoint-card:nth-child(4) { animation-delay: 0.4s; }
+        .source-card {
+          animation: fadeInUp 0.6s ease-out;
+          animation-fill-mode: both;
+        }
+
+        .source-card:nth-child(1) { animation-delay: 0.1s; }
+        .source-card:nth-child(2) { animation-delay: 0.2s; }
+        .source-card:nth-child(3) { animation-delay: 0.3s; }
 
         /* Responsive */
         @media (max-width: 768px) {
           .container { padding: 1rem; }
           .endpoints-grid { grid-template-columns: 1fr; }
+          .sources-grid { grid-template-columns: 1fr; }
           .stats { gap: 1rem; }
           .author-info { flex-direction: column; }
         }
@@ -430,6 +556,63 @@ router.get('/', (req, res) => {
           </div>
         </div>
 
+        <!-- Data Sources -->
+        <div class="data-sources">
+          <h2 class="sources-title">
+            <i class="fas fa-database"></i>
+            Data Sources
+          </h2>
+          
+          <div class="sources-grid">
+            <div class="source-card">
+              <div class="source-header">
+                <i class="fas fa-cloud"></i>
+                <h3>api.alquran.cloud</h3>
+              </div>
+              <div class="source-description">
+                Complete Quran text, metadata for verses, and high-quality audio recitations from various reciters.
+              </div>
+              <div class="source-tags">
+                <span class="tag">Quran Text</span>
+                <span class="tag">Meta Verses</span>
+                <span class="tag">Audio</span>
+              </div>
+            </div>
+
+            <div class="source-card">
+              <div class="source-header">
+                <i class="fas fa-flag"></i>
+                <h3>quran.kemenag.go.id</h3>
+              </div>
+              <div class="source-description">
+                Official Indonesian translations and comprehensive tafsir (commentary) for all verses, available in both short and detailed formats.
+              </div>
+              <div class="source-tags">
+                <span class="tag">ID Translation</span>
+                <span class="tag">Tafsir Verses</span>
+                <span class="tag">Short/Long</span>
+              </div>
+            </div>
+
+            <div class="source-card">
+              <div class="source-header">
+                <i class="fas fa-book-open"></i>
+                <h3>Al-Quran-ID-API</h3>
+              </div>
+              <div class="source-description">
+                Indonesian tafsir for each Surah with comprehensive explanations and context.
+              </div>
+              <div class="source-tags">
+                <span class="tag">ID Tafsir Surah</span>
+              </div>
+              <div class="source-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Note: Revelation type for Surah 13 & 55 corrected to Medinan according to Sahih International data</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Footer -->
         <div class="footer">
           <p>Built with ❤️ for the Muslim community worldwide</p>
@@ -532,6 +715,7 @@ router.get('/', (req, res) => {
     </html>
   `);
 });
+
 router.get('/surah', caching, SurahHandler.getAllSurah);
 
 router.get('/surah/:surah', caching, SurahHandler.getSurah);
