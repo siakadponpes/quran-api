@@ -6,8 +6,36 @@ const JuzHandler = require('./handlers/juz');
 
 const router = Router();
 
+// HTTPS redirect middleware
 router.use((req, res, next) => {
+  // Check if request is not secure and not from localhost/development
+  const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+  const isLocalhost = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
+  
+  if (!isSecure && !isLocalhost && req.method === 'GET') {
+    const httpsUrl = `https://${req.hostname}${req.originalUrl}`;
+    return res.redirect(301, httpsUrl);
+  }
+  
+  next();
+});
+
+// Security headers middleware
+router.use((req, res, next) => {
+  // Cache control
   res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=86400, stale-while-revalidate');
+  
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // HSTS header (only for HTTPS)
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
+  
   next();
 });
 
@@ -39,15 +67,27 @@ router.get('/', (req, res) => {
       <title>Qur'an API - Modern Islamic API Service</title>
       <link rel="icon" type="image/svg+xml" href="${generateFavicon()}">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+      
+      <!-- Preconnect for performance -->
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
       <meta name="description" content="Modern, fast, and reliable RESTful API service for accessing the Holy Quran. Get verses, chapters, and more with simple HTTP requests.">
       <meta name="keywords" content="Quran API, Islamic API, RESTful API, Quran verses, Surah, Ayah, Juz">
       <meta name="author" content="Sutan Gading Fadhillah Nasution">
+      
+      <!-- Security & Performance -->
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com;">
+      <meta http-equiv="X-Content-Type-Options" content="nosniff">
+      
+      <!-- Canonical URL (forces HTTPS) -->
+      <link rel="canonical" href="https://${req.get('host')}${req.originalUrl}">
       
       <!-- Open Graph Meta Tags -->
       <meta property="og:title" content="Qur'an API - Modern Islamic API Service">
       <meta property="og:description" content="Modern, fast, and reliable RESTful API service for accessing the Holy Quran.">
       <meta property="og:type" content="website">
-      <meta property="og:image" content="${generateFavicon()}">
+      <meta property="og:url" content="https://${req.get('host')}${req.originalUrl}">
+      <meta property="og:image" content="${generateFavicon()}">>
       
       <style>
         * {
@@ -768,6 +808,17 @@ router.all('*', (req, res) => {
       <title>404 - Resource Not Found | Qur'an API</title>
       <link rel="icon" type="image/svg+xml" href="${generateFavicon()}">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+      
+      <!-- Security & Performance -->
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com;">
+      <meta http-equiv="X-Content-Type-Options" content="nosniff">
+      
+      <!-- Canonical URL -->
+      <link rel="canonical" href="https://${req.get('host')}/">
+      
+      <!-- Preconnect for performance -->
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
       
       <style>
         * {
