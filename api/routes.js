@@ -87,7 +87,7 @@ router.get('/', (req, res) => {
       <meta property="og:description" content="Modern, fast, and reliable RESTful API service for accessing the Holy Quran.">
       <meta property="og:type" content="website">
       <meta property="og:url" content="https://${req.get('host')}${req.originalUrl}">
-      <meta property="og:image" content="${generateFavicon()}">>
+      <meta property="og:image" content="${generateFavicon()}">
       
       <style>
         * {
